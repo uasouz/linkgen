@@ -5,6 +5,7 @@ import (
 	"os"
 )
 
+// LoadConfigFile - Loads config Values from the specified filed
 func (cfg *Config) LoadConfigFile(filepath string) error {
 	// Check if file exists
 	_, err := os.Stat(filepath)

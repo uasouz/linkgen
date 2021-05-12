@@ -23,6 +23,7 @@ func generateMinifiedLinkRequestSerializer(body io.ReadCloser) (request generate
 	return
 }
 
+// GenerateMinifiedLink - generates and save a shortid for a given URL
 func (s *Server) GenerateMinifiedLink(w http.ResponseWriter, req *http.Request) {
 	request, err := generateMinifiedLinkRequestSerializer(req.Body)
 	if err != nil {

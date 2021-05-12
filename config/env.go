@@ -5,6 +5,7 @@ import (
 	"reflect"
 )
 
+// LoadConfigEnv - Loads Config values from Environment Variables
 func (cfg *Config) LoadConfigEnv() {
 	av := reflect.ValueOf(cfg)
 	v := av.Elem()

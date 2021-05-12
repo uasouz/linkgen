@@ -5,10 +5,13 @@ import (
 	"reflect"
 )
 
+// Config - Base configuration struct
 type Config struct {
 	APIPort string `yaml:"port" env:"API_PORT"`
 }
 
+// LoadConfig - Loads Config from file and then tries to load from Environment Variables, if there is any Environment variables
+// they will override the one set using the file
 func (cfg *Config) LoadConfig(cfgFilePath string) {
 	// Load configuration from file and from environment
 	if err := cfg.LoadConfigFile(cfgFilePath); err != nil {
