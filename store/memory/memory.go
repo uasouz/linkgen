@@ -1,5 +1,6 @@
 package memory
 
+// InMemoryLinkStore An in memory store.LinkStore interface implementation
 type InMemoryLinkStore struct {
 	linkMap map[string]string
 }
