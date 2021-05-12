@@ -1,3 +1,6 @@
+# github.com/matoous/go-nanoid/v2 v2.0.0
+## explicit
+github.com/matoous/go-nanoid/v2
 # gopkg.in/yaml.v2 v2.4.0
 ## explicit
 gopkg.in/yaml.v2
