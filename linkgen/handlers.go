@@ -1,4 +1,4 @@
-package api
+package linkgen
 
 import (
 	"encoding/json"

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"linkgen/api"
 	"linkgen/config"
+	"linkgen/linkgen"
 	"linkgen/store/memory"
 )
 
@@ -17,8 +17,8 @@ func main() {
 	linkStore := memory.New()
 
 	// Creates a new API Service with the port configuration
-	apiService := api.New(cfg.APIPort, linkStore)
+	linkgenService := linkgen.New(cfg.APIPort, linkStore)
 
 	// Start API Service
-	apiService.Start()
+	linkgenService.Start()
 }
