@@ -2,7 +2,6 @@ package linkgen
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"linkgen/core"
 	"linkgen/pkg/baseresponse"
@@ -51,6 +50,13 @@ func (s *Server) GenerateMinifiedLink(w http.ResponseWriter, req *http.Request) 
 }
 
 func (s *Server) RedirectToOriginalURL(w http.ResponseWriter, req *http.Request) {
-	valueMap := req.Context().Value(paramsKey)
-	fmt.Fprint(w, valueMap)
+	requestParams := req.Context().Value(paramsKey).(map[string]string)
+	shortid := requestParams["code"]
+	originalURL := s.LinkStore.GetOriginal(shortid)
+	if originalURL == "" {
+		response := baseresponse.BaseResponse{Errors: []string{"URL not found"}}
+		response.FailWithCode(w, nil, 404)
+		return
+	}
+	http.Redirect(w, req, originalURL, 302)
 }
