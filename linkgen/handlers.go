@@ -2,6 +2,7 @@ package linkgen
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"linkgen/core"
 	"linkgen/pkg/baseresponse"
@@ -47,4 +48,9 @@ func (s *Server) GenerateMinifiedLink(w http.ResponseWriter, req *http.Request) 
 		Link:    request.Link,
 		ShortID: shortid,
 	})
+}
+
+func (s *Server) RedirectToOriginalURL(w http.ResponseWriter, req *http.Request) {
+	valueMap := req.Context().Value(paramsKey)
+	fmt.Fprint(w, valueMap)
 }

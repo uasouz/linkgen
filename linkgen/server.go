@@ -16,8 +16,10 @@ type Server struct {
 
 // Start - starts the HTTP API server on the specified port after adding all endpoints
 func (s *Server) Start() {
-	http.HandleFunc("/linkgen", s.GenerateMinifiedLink)
-	http.ListenAndServe(":"+s.Port, nil)
+	router := NewRouter()
+	router.addRoute("POST", "/linkgen", s.GenerateMinifiedLink)
+	router.addRoute("GET", "/linkgen/:code", s.RedirectToOriginalURL)
+	http.ListenAndServe(":"+s.Port, router.Serve())
 
 	//<-s.shutdown
 	// gracefull shutdown
