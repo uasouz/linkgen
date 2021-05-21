@@ -3,7 +3,7 @@ package main
 import (
 	"linkgen/config"
 	"linkgen/linkgen"
-	"linkgen/store/memory"
+	"linkgen/store/mysql"
 )
 
 func main() {
@@ -14,7 +14,12 @@ func main() {
 	cfg.LoadConfig("config.yaml")
 
 	// Get new instance of store.LinkStore
-	linkStore := memory.New()
+	linkStore, err := mysql.New(cfg.DBDSN)
+
+	// Panic if there is no storage
+	if err != nil {
+		panic("no database connection")
+	}
 
 	// Creates a new API Service with the port configuration
 	linkgenService := linkgen.New(cfg.APIPort, linkStore)

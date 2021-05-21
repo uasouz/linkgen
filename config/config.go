@@ -8,6 +8,7 @@ import (
 // Config - Base configuration struct
 type Config struct {
 	APIPort string `yaml:"port" env:"API_PORT"`
+	DBDSN   string `yaml:"dsn" env:"DBDSN"`
 }
 
 // LoadConfig - Loads Config from file and then tries to load from Environment Variables, if there is any Environment variables

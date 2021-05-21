@@ -6,14 +6,14 @@ type InMemoryLinkStore struct {
 }
 
 // AddLinkMapping - Add an URl to the linkMap with a shortID as key
-func (m InMemoryLinkStore) AddLinkMapping(original, shortID string) bool {
+func (m InMemoryLinkStore) AddLinkMapping(original, shortID string) error {
 	m.linkMap[shortID] = original
-	return true
+	return nil
 }
 
 // GetOriginal - Retrieve the original URL for the given shortID
-func (m InMemoryLinkStore) GetOriginal(shortID string) string {
-	return m.linkMap[shortID]
+func (m InMemoryLinkStore) GetOriginal(shortID string) (string, error) {
+	return m.linkMap[shortID], nil
 }
 
 // New - creates a new instance for the LinkGen InMemoryLinkStore
