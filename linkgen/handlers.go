@@ -37,7 +37,7 @@ func (s *Server) GenerateMinifiedLink(w http.ResponseWriter, req *http.Request) 
 		response.Fail(w, nil)
 		return
 	}
-	if !s.LinkStore.AddLinkMapping(request.Link, shortid) {
+	if err = s.LinkStore.AddLinkMapping(request.Link, shortid); err != nil {
 		response := baseresponse.BaseResponse{Errors: []string{"failed to add link"}}
 		response.Fail(w, nil)
 		return
@@ -52,7 +52,12 @@ func (s *Server) GenerateMinifiedLink(w http.ResponseWriter, req *http.Request) 
 func (s *Server) RedirectToOriginalURL(w http.ResponseWriter, req *http.Request) {
 	requestParams := req.Context().Value(paramsKey).(map[string]string)
 	shortid := requestParams["code"]
-	originalURL := s.LinkStore.GetOriginal(shortid)
+	originalURL, err := s.LinkStore.GetOriginal(shortid)
+	if err != nil {
+		response := baseresponse.BaseResponse{Errors: []string{"failed to get link"}}
+		response.Fail(w, nil)
+		return
+	}
 	if originalURL == "" {
 		response := baseresponse.BaseResponse{Errors: []string{"URL not found"}}
 		response.FailWithCode(w, nil, 404)
