@@ -47,8 +47,8 @@ func (r *Router) Serve() http.Handler {
 		for _, route := range r.routes[req.Method] {
 			if match, newContext := matchPath(path, route.pattern, ctx); match {
 				route.handler.ServeHTTP(w, req.WithContext(newContext))
+				return
 			}
-			return
 		}
 		http.NotFound(w, req)
 	})
@@ -69,6 +69,8 @@ func matchPath(path, pattern string, ctx context.Context) (bool, context.Context
 			ctxValues := ctx.Value(paramsKey).(map[string]string)
 			ctxValues[chunk[1:]] = pathChunks[i]
 			ctx = context.WithValue(ctx, paramsKey, ctxValues)
+		} else if chunk != pathChunks[i] {
+			return false, ctx
 		}
 	}
 
