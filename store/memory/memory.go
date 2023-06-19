@@ -1,22 +1,17 @@
 package memory
 
-// InMemoryLinkStore An in memory store.LinkStore interface implementation
-type InMemoryLinkStore struct {
+type LinkStore struct {
 	linkMap map[string]string
 }
 
-// AddLinkMapping - Add an URl to the linkMap with a shortID as key
-func (m InMemoryLinkStore) AddLinkMapping(original, shortID string) error {
-	m.linkMap[shortID] = original
-	return nil
+func (m LinkStore) AddLinkMapping(original, shortID string) bool {
+	panic("implement me")
 }
 
-// GetOriginal - Retrieve the original URL for the given shortID
-func (m InMemoryLinkStore) GetOriginal(shortID string) (string, error) {
-	return m.linkMap[shortID], nil
+func (m LinkStore) GetOriginal(shortID string) string {
+	panic("implement me")
 }
 
-// New - creates a new instance for the LinkGen InMemoryLinkStore
-func New() *InMemoryLinkStore {
-	return &InMemoryLinkStore{linkMap: map[string]string{}}
+func New() *LinkStore {
+	return &LinkStore{linkMap: map[string]string{}}
 }
