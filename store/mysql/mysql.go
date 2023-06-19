@@ -2,20 +2,36 @@ package mysql
 
 import (
 	"database/sql"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type LinkStore struct {
 	db *sql.DB
 }
 
-func (m LinkStore) AddLinkMapping(original, shortID string) bool {
-	panic("implement me")
+func (m LinkStore) AddLinkMapping(original, shortID string) error {
+	_, err := m.db.Query("INSERT INTO links (shortid,originalURL) values(?,?)", shortID, original)
+	return err
 }
 
-func (m LinkStore) GetOriginal(shortID string) string {
-	panic("implement me")
+func (m LinkStore) GetOriginal(shortID string) (originalURL string, err error) {
+	row := m.db.QueryRow("SELECT originalURL from links where shortid=?", shortID)
+	err = row.Scan(&originalURL)
+	return
 }
 
-func New() *LinkStore {
-	return &LinkStore{db: nil}
+func New(dsn string) (*LinkStore, error) {
+	dataBase, err := sql.Open("mysql", dsn)
+	if err != nil {
+		return nil, err
+	}
+
+	err = dataBase.Ping()
+	if err != nil {
+		return nil, err
+	}
+
+	return &LinkStore{
+		db: dataBase,
+	}, nil
 }
