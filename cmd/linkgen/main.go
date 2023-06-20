@@ -8,7 +8,9 @@ import (
 
 func main() {
 	// Start configuration structure with default values
-	cfg := config.Config{APIPort: "3000"}
+	cfg := config.Config{
+		APIPort: "3000",
+	}
 
 	// Call configuration load function
 	cfg.LoadConfig("config.yaml")

@@ -1,5 +1,7 @@
 package memory
 
+import "linkgen/store"
+
 // InMemoryLinkStore An in memory store.LinkStore interface implementation
 type InMemoryLinkStore struct {
 	linkMap map[string]string
@@ -13,6 +15,9 @@ func (m InMemoryLinkStore) AddLinkMapping(original, shortID string) error {
 
 // GetOriginal - Retrieve the original URL for the given shortID
 func (m InMemoryLinkStore) GetOriginal(shortID string) (string, error) {
+	if _, ok := m.linkMap[shortID]; !ok {
+		return "", store.ErrLinkNotFound
+	}
 	return m.linkMap[shortID], nil
 }
 
