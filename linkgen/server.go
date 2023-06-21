@@ -2,9 +2,10 @@ package linkgen
 
 import (
 	"context"
-	"fmt"
 	"linkgen/store"
+	"log"
 	"net/http"
+	"time"
 )
 
 // Server - HTTP server struct with all dependencies, anything you need to use inside your handlers need to be attached
@@ -21,13 +22,14 @@ func (s *Server) Start() error {
 	router.addRoute("POST", "/linkgen", s.GenerateMinifiedLink)
 	router.addRoute("GET", "/linkgen/:code", s.RedirectToOriginalURL)
 	server := http.Server{
-		Addr:    ":" + s.Port,
-		Handler: router.Serve(),
+		Addr:              ":" + s.Port,
+		Handler:           router.Serve(),
+		ReadHeaderTimeout: 30 * time.Second,
 	}
 
 	s.server = &server
 
-	fmt.Println("Starting server on port " + s.Port)
+	log.Println("Starting server on port " + s.Port)
 
 	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		return err

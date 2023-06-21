@@ -7,6 +7,7 @@ import (
 
 	"github.com/pressly/goose/v3"
 
+	// Import mysql driver
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -15,7 +16,7 @@ type LinkStore struct {
 }
 
 func (m LinkStore) AddLinkMapping(original, shortID string) error {
-	_, err := m.db.Query("INSERT INTO links (shortid,originalURL) values(?,?)", shortID, original)
+	_, err := m.db.Exec("INSERT INTO links (shortid,originalURL) values(?,?)", shortID, original)
 	return err
 }
 

@@ -2,12 +2,12 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"linkgen/config"
 	"linkgen/linkgen"
 	"linkgen/store"
 	"linkgen/store/memory"
 	"linkgen/store/mysql"
+	"log"
 	"os/signal"
 	"syscall"
 	"time"
@@ -22,7 +22,6 @@ func initializeLinkStore(cfg config.LinkStoreConfig) (store.LinkStore, error) {
 	default:
 		return memory.New(), nil
 	}
-	return nil, nil
 }
 
 func main() {
@@ -65,10 +64,10 @@ func main() {
 
 	// Wait for all goroutines to finish
 	if err = g.Wait(); err == context.Canceled || err == nil {
-		fmt.Println("gracefully quit server")
+		log.Println("gracefully quit server")
 	} else if err != nil {
-		fmt.Println(err)
-		fmt.Println("server quit unexpectedly")
+		log.Println(err)
+		log.Println("server quit unexpectedly")
 	}
 
 }

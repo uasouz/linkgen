@@ -1,7 +1,7 @@
 package config
 
 import (
-	"fmt"
+	"log"
 	"reflect"
 )
 
@@ -21,7 +21,7 @@ type LinkStoreConfig struct {
 func (cfg *Config) LoadConfig(cfgFilePath string) {
 	// Load configuration from file and from environment
 	if err := cfg.LoadConfigFile(cfgFilePath); err != nil {
-		fmt.Println("WARN: Could not load config file")
+		log.Println("WARN: Could not load config file")
 	}
 	cfg.LoadConfigEnv()
 }

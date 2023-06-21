@@ -45,7 +45,7 @@ func (r *Router) Serve() http.Handler {
 		path := req.URL.Path
 		ctx := context.WithValue(req.Context(), paramsKey, map[string]string{})
 		for _, route := range r.routes[req.Method] {
-			if match, newContext := matchPath(path, route.pattern, ctx); match {
+			if match, newContext := matchPath(ctx, path, route.pattern); match {
 				route.handler.ServeHTTP(w, req.WithContext(newContext))
 				return
 			}
@@ -55,7 +55,7 @@ func (r *Router) Serve() http.Handler {
 }
 
 // matchPath - check if the path matches a route pattern
-func matchPath(path, pattern string, ctx context.Context) (bool, context.Context) {
+func matchPath(ctx context.Context, path, pattern string) (bool, context.Context) {
 	pathChunks := strings.Split(path, "/")
 	patternChunks := strings.Split(pattern, "/")
 

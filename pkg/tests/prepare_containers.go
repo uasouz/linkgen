@@ -68,8 +68,8 @@ func prepareContainer(ctx context.Context, image Image) (testcontainers.Containe
 		if container != nil {
 			reader, _ := container.Logs(ctx)
 			var buf []byte
-			reader.Read(buf)
-			fmt.Println(string(buf))
+			_, err = reader.Read(buf)
+			log.Println(string(buf))
 		}
 		return nil, nil, err
 	}
@@ -79,7 +79,7 @@ func prepareContainer(ctx context.Context, image Image) (testcontainers.Containe
 		return nil, nil, err
 	}
 
-	var uris []string
+	var uris = make([]string, len(image.Ports))
 
 	for i := range image.Ports {
 		mappedPort, err := container.MappedPort(ctx, nat.Port(image.Ports[i].Port))
@@ -87,9 +87,8 @@ func prepareContainer(ctx context.Context, image Image) (testcontainers.Containe
 			return nil, nil, err
 		}
 
-		var uri string
-		uri = fmt.Sprintf("%s:%s", hostIP, mappedPort.Port())
-		uris = append(uris, uri)
+		uri := fmt.Sprintf("%s:%s", hostIP, mappedPort.Port())
+		uris[i] = uri
 	}
 
 	log.Printf("TestContainers: Container %s is now running at %s\n", req.Image, uris)

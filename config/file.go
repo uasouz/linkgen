@@ -1,8 +1,9 @@
 package config
 
 import (
-	"gopkg.in/yaml.v2"
 	"os"
+
+	"gopkg.in/yaml.v2"
 )
 
 // LoadConfigFile - Loads config Values from the specified filed
