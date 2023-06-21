@@ -1,9 +1,10 @@
 package linkgen
 
 import (
+	"context"
+	"fmt"
 	"linkgen/store"
 	"net/http"
-	"os"
 )
 
 // Server - HTTP server struct with all dependencies, anything you need to use inside your handlers need to be attached
@@ -11,27 +12,33 @@ import (
 type Server struct {
 	Port      string
 	LinkStore store.LinkStore
-	shutdown  chan os.Signal
+	server    *http.Server
 }
 
 // Start - starts the HTTP API server on the specified port after adding all endpoints
-func (s *Server) Start() {
+func (s *Server) Start() error {
 	router := NewRouter()
 	router.addRoute("POST", "/linkgen", s.GenerateMinifiedLink)
 	router.addRoute("GET", "/linkgen/:code", s.RedirectToOriginalURL)
-	http.ListenAndServe(":"+s.Port, router.Serve())
+	server := http.Server{
+		Addr:    ":" + s.Port,
+		Handler: router.Serve(),
+	}
 
-	//<-s.shutdown
-	// gracefull shutdown
+	s.server = &server
+
+	fmt.Println("Starting server on port " + s.Port)
+
+	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		return err
+	}
+
+	return nil
 }
 
 // Stop - sends signal to gracefully stop the server, this is useful to avoid losing data for requests that are being handled
-func (s *Server) Stop() {
-	s.shutdown <- os.Kill
-}
-
-func (s *Server) Healthz() {
-
+func (s *Server) Stop(ctx context.Context) error {
+	return s.server.Shutdown(ctx)
 }
 
 // New - creates a new instance for the LinkGen API HTTP Server

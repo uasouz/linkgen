@@ -10,6 +10,7 @@ require (
 	github.com/pressly/goose/v3 v3.11.2
 	github.com/testcontainers/testcontainers-go v0.20.1
 	golang.org/x/exp v0.0.0-20230522175609-2e198f4a06a1
+	golang.org/x/sync v0.1.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 

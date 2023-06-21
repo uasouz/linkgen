@@ -7,8 +7,13 @@ import (
 
 // Config - Base configuration struct
 type Config struct {
-	APIPort string `yaml:"port" env:"API_PORT"`
-	DBDSN   string `yaml:"dsn" env:"DBDSN"`
+	APIPort         string          `yaml:"port" env:"API_PORT"`
+	LinkStoreConfig LinkStoreConfig `yaml:"link_store_config"`
+}
+
+type LinkStoreConfig struct {
+	Type string `yaml:"type" env:"LINK_STORE_TYPE"`
+	DSN  string `yaml:"dsn" env:"LINK_STORE_DSN"`
 }
 
 // LoadConfig - Loads Config from file and then tries to load from Environment Variables, if there is any Environment variables
